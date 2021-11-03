@@ -111,7 +111,6 @@ function init(){
    // funzione colora-bombe
    function colorBombs(){
       console.log(arrayQuadrati);
-
    }
 
 }
