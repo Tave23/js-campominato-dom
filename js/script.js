@@ -154,7 +154,7 @@ function init(){
    // inserisco il msg in un divs
       const output = document.createComment('div');
       output.innerHTML = `<h5>${messaggio}</h5>`;
-      game.append(output);
+      output.append(game);
    }
 
 }
