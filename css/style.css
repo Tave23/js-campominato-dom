@@ -135,4 +135,7 @@ footer{
    display: none;
 }
 
-
+.bombs{
+   background-color: red;
+   color: white;
+}

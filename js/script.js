@@ -25,6 +25,17 @@ function init(){
    else if (valoreScelta === 2) square = 81;
    else if (valoreScelta === 3) square = 49;
 
+   // numero di bombe create
+   const NUMBOMBE = 16; 
+   const bombe = generaBombe();
+
+   // contatore tentativi
+   let tentativi = 0;
+   const listaTentativi = [];
+
+   // massimo tentativi
+   const maxAttemps = square - NUMBOMBE;
+
    console.log('numero di caselle spawnate: ',square);
    // creo il container e gli ggiungo la classe
    const container = document.createElement('div');
@@ -43,28 +54,40 @@ function init(){
       function handleClickCell(event){
          console.log(parseInt(event.target.innerText));
          
-         // variabile dei bottoni cliccati 
+         // costante del valore all'interno della cella
          const cliccati = (parseInt(event.target.innerText));
 
-         // gli dò anche la classe per cambiare colore una volta cliccato
-         quadrato.classList.add('clicked');
-
-         // se non è un bomba continua, altrimenti hai perso!
-         if(!bombe.includes(cliccati)){
+         // verifico se ho cliccato una bomba
+         if(bombe.includes(cliccati)){
+            // fine gioco
+            console.log('Hai perso!');
+            fineGioco();
+            
+         } else { 
             console.log('continua');
-         } else {
-            alert('Hai perso!');
+            if(listaTentativi.includes(cliccati)){
+             // tentativo +1
+             tentativi++;
+
+               // aggiungo il tentativo alla lista cliccati
+             listaTentativi.push(cliccati);  
+
+             // gli dò anche la classe per cambiare colore una volta cliccato
+             quadrato.classList.add('clicked');
+
+             // se vinci il gioco... 
+             if(tentativi === maxAttemps){
+                fineGioco();
+             }
+             
+            
+               
+            }
          }
-
       }
-
    }
-// numero di bombe create
-   const NUMBOMBE = 16; 
-   const bombe = generaBombe();
 
-   // funzione colora bombe
-   colorBombs();
+
 // creo i quadrati di ogni numero
    function createSquare() {
       
@@ -108,13 +131,7 @@ function init(){
       return bombe;
    }
 
-   // funzione colora-bombe
-   function colorBombs(){
-      console.log(arrayQuadrati);
-   }
-
 }
-
 
 // funzione per generare una bomba random 1-16
 
@@ -122,3 +139,28 @@ function generaBombaRandom(min, max){
    return Math.floor(Math.random() * (max - min +1) + min);
 }
    
+function fineGioco(){
+   // coloro tutte le bombe
+   const quadrato = document.getElementsByClassName('quadrato');
+   for (let y = 0; y < quadrato.length; y++) {
+      // se l'indice della cella è incluso tra le bombe
+      if(bombe.includes(y + 1)){
+         quadrato[y].classList.add('bombs');
+      }
+
+      quadrato[i].removeEventListener('click', handleClickCell);
+   }
+
+   // messaggio di output
+   let messaggio = '';
+
+   if(tentativi === maxAttemps){
+      messaggio = 'Complimenti, hai vinto';
+   } else{
+      messaggio = `Hai perso, hai fatto ${tentativi} tentativi`;
+   }
+// inserisco il msg in un divs
+   const output = document.createComment('div');
+   output.innerHTML = `<h5>${messaggio}</h5>`;
+   document.querySelector('main.wrapper').append(output);
+}
