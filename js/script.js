@@ -25,13 +25,13 @@ function init(){
    else if (valoreScelta === 2) square = 81;
    else if (valoreScelta === 3) square = 49;
 
-   // numero di bombe create
-   const NUMBOMBE = 16; 
-   const bombe = generaBombe();
-
    // contatore tentativi
    let tentativi = 0;
    const listaTentativi = [];
+
+   // numero di bombe create
+   const NUMBOMBE = 16; 
+   const bombe = generaBombe();
 
    // massimo tentativi
    const maxAttemps = square - NUMBOMBE;
@@ -131,6 +131,32 @@ function init(){
       return bombe;
    }
 
+   function fineGioco(){
+      // coloro tutte le bombe
+      const quadrato = document.getElementsByClassName('quadrato');
+      for (let y = 0; y < quadrato.length; y++) {
+         // se l'indice della cella è incluso tra le bombe
+         if(bombe.includes(y + 1)){
+            quadrato[y].classList.add('bombs');
+         }
+   
+         quadrato[y].removeEventListener('click', handleClickCell);
+      }
+   
+      // messaggio di output
+      let messaggio = '';
+   
+      if(tentativi === maxAttemps){
+         messaggio = 'Complimenti, hai vinto';
+      } else{
+         messaggio = `Hai perso, hai fatto ${tentativi} tentativi`;
+      }
+   // inserisco il msg in un divs
+      const output = document.createComment('div');
+      output.innerHTML = `<h5>${messaggio}</h5>`;
+      game.append(output);
+   }
+
 }
 
 // funzione per generare una bomba random 1-16
@@ -139,28 +165,3 @@ function generaBombaRandom(min, max){
    return Math.floor(Math.random() * (max - min +1) + min);
 }
    
-function fineGioco(){
-   // coloro tutte le bombe
-   const quadrato = document.getElementsByClassName('quadrato');
-   for (let y = 0; y < quadrato.length; y++) {
-      // se l'indice della cella è incluso tra le bombe
-      if(bombe.includes(y + 1)){
-         quadrato[y].classList.add('bombs');
-      }
-
-      quadrato[i].removeEventListener('click', handleClickCell);
-   }
-
-   // messaggio di output
-   let messaggio = '';
-
-   if(tentativi === maxAttemps){
-      messaggio = 'Complimenti, hai vinto';
-   } else{
-      messaggio = `Hai perso, hai fatto ${tentativi} tentativi`;
-   }
-// inserisco il msg in un divs
-   const output = document.createComment('div');
-   output.innerHTML = `<h5>${messaggio}</h5>`;
-   document.querySelector('main.wrapper').append(output);
-}
