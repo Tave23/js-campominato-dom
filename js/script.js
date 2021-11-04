@@ -57,6 +57,9 @@ function init(){
          // costante del valore all'interno della cella
          const cliccati = (parseInt(event.target.innerText));
 
+         // gli dò anche la classe per cambiare colore una volta cliccato
+         quadrato.classList.add('clicked');
+
          // verifico se ho cliccato una bomba
          if(bombe.includes(cliccati)){
             // fine gioco
@@ -70,10 +73,7 @@ function init(){
              tentativi++;
 
                // aggiungo il tentativo alla lista cliccati
-             listaTentativi.push(cliccati);  
-
-             // gli dò anche la classe per cambiare colore una volta cliccato
-             quadrato.classList.add('clicked');
+             listaTentativi.push(cliccati); 
 
              // se vinci il gioco... 
              if(tentativi === maxAttemps){
@@ -139,8 +139,10 @@ function init(){
          if(bombe.includes(y + 1)){
             quadrato[y].classList.add('bombs');
          }
-   
-         quadrato[y].removeEventListener('click', handleClickCell);
+         
+         // rimuovo il click se perdo/vinco
+         // quadrato[y].removeEventListener('click', handleClickCell);
+         quadrato[y].style.pointerEvents = 'none';
       }
    
       // messaggio di output
@@ -149,12 +151,19 @@ function init(){
       if(tentativi === maxAttemps){
          messaggio = 'Complimenti, hai vinto';
       } else{
-         messaggio = `Hai perso, hai fatto ${tentativi} tentativi`;
+         messaggio = 'Hai perso, ritenta sarai più fortunato';
       }
    // inserisco il msg in un divs
-      const output = document.createComment('div');
-      output.innerHTML = `<h5>${messaggio}</h5>`;
-      output.append(game);
+      // const output = document.createComment('div');
+      // output.innerHTML = `<h5>${messaggio}</h5>`;
+      // // game.append(output);
+      // document.querySelector('.main-wrapper').append(output);
+
+      const output = document.createElement('div');
+      output.classList.add('risultato')
+      output.innerHTML = `<h5${messaggio}</h5>`;
+      game.append(output);
+      console.log(output);
    }
 
 }
